@@ -55,30 +55,47 @@ print('\n')
 # Hockey data practice
 hockey_data =pd.read_csv("skater_stats.csv",encoding = "ISO-8859-1",low_memory=False,
 	dtype={'GP': int})
+#delete unecessary column
+del hockey_data['Unnamed: 0']
 # sort by team asc and Goals Decs
 print(hockey_data.sort_values(['Tm','G'],ascending=[1,0]))
 print('\n')
 
+#---- prepping all colmns to be same data type --
+
+# some values in 'G' and 'A' are problematic such that they are special charecters, convert those to NaN
+hockey_data['G'] = pd.to_numeric(hockey_data['G'], errors='coerce') # fixes "invalid literal for int() with base 10: ' -   '
+hockey_data['A'] = pd.to_numeric(hockey_data['A'], errors='coerce') # fixes "invalid literal for int() with base 10: ' -   '
+
+# now fill in empty slots
+hockey_data = hockey_data.fillna(0) # fixes "Cannot convert non-finite values (NA or inf) to integer"
+
+# finally convert to int 
+#if all values are numbers , this works but first fill in empty spaces ^^
+hockey_data['G']=hockey_data['G'].astype(int)
+hockey_data['A']=hockey_data['A'].astype(int)
+
 # add columns G+A
-hockey_data['G+ATotal']= hockey_data['G'] + hockey_data['A']
-print(hockey_data[['Player','G+ATotal']])
+hockey_data['Total']= hockey_data['G'] + hockey_data['A']
+print(hockey_data[['Player','Total']])
 print('\n')
 
 #drop column G+ATotal
-hockey_data = hockey_data.drop(columns=['G+ATotal'])
-
-# add total #2
-#" : " means all rows
-hockey_data['G+ATotal'] =hockey_data.iloc[:,7:9].sum(axis=1)
-print(hockey_data.head())
-
-print('\n')
+hockey_data = hockey_data.drop(columns=['Total'])
 
 # if all values were numbers , this would work
 #hockey_data['G']=hockey_data['G'].astype(int)
 
-# some values in 'G' are problematic , convert those to NaN
-hockey_data['G'] = pd.to_numeric(hockey_data['G'], errors='coerce')
+
+
+# second adding method
+#" : " means all rows
+hockey_data['Total'] =hockey_data.iloc[:,5:8].sum(axis=1)
+print(hockey_data.head())
+
+print('\n')
+
+
 
 # Get a Series object containing the data type objects of each column of Dataframe.
 # Index of series is column name.
@@ -87,3 +104,5 @@ print('Data type of each column of Dataframe :')
 print(dataTypeHockey)
 
 print(hockey_data.head())
+
+
