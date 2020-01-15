@@ -1,65 +1,10 @@
 import pandas as pd
 
-
-#pokemon data practice
-data=pd.read_csv("pokemon_data.csv")
-print(data.head(3))
-print('\n')
-
-data_xlsx=pd.read_excel("pokemon_data.xlsx")
-#print(data_xlsx.tail(3))
-print('\n')
-
-data_tabSep= pd.read_csv("pokemon_data.txt",delimiter='\t')
-#print(data_tabSep.head(4))
-print('\n')
-
-#print colums
-#will print all
-#print(data[['Name','HP','Speed']])
-print('\n')
-
-#will print all details of index 0 only
-#print(data.iloc[0])
-print('\n')
-
-#or multiple rows ( will get rows 0 ,1 ,2)
-#print(data.iloc[0:3])
-print('\n')
-
-#get row 2 , column index 1
-#print(data.iloc[2,1])
-print('\n')
-
-#will print all rows with Name column
-#index =0
-#for index,row in data.iterrows():
-	#print(index,row['Name'])
-
-print('\n')
-
-#print all where Type 1 equals Poison
-#print(data.loc[data['Type 1'] == "Poison"])
-print('\n')
-
-#get mean , min, std , max etc..
-#data.describe()
-
-#sort columns by attack ASCD
-#print(data.sort_values('Attack'))
-#DESC
-#print(data.sort_values('Attack',ascending =False))
-print('\n')
-
-
 # Hockey data practice
 hockey_data =pd.read_csv("skater_stats.csv",encoding = "ISO-8859-1",low_memory=False,
 	dtype={'GP': int})
 #delete unecessary column
 del hockey_data['Unnamed: 0']
-# sort by team asc and Goals Decs
-print(hockey_data.sort_values(['Tm','G'],ascending=[1,0]))
-print('\n')
 
 #---- prepping all colmns to be same data type --
 
@@ -74,6 +19,55 @@ hockey_data = hockey_data.fillna(0) # fixes "Cannot convert non-finite values (N
 #if all values are numbers , this works but first fill in empty spaces ^^
 hockey_data['G']=hockey_data['G'].astype(int)
 hockey_data['A']=hockey_data['A'].astype(int)
+
+#prints first 3 rows
+print(hockey_data.head(3))
+print('\n')
+
+#print last 3  rows
+print(hockey_data.tail(3))
+print('\n')
+
+#import excel file
+#hockey_data=pd.read_excel("hohecky.xlsx")
+#print(data_xlsx.tail(3))
+
+
+#import txt file
+#hockey_data= pd.read_csv("skater_stats.csv.txt",delimiter='\t')
+#print(data_tabSep.head(4))
+
+
+#print colums
+#will print all rows of specific column
+print(hockey_data[['Season','Player','Tm','G']])
+print('\n')
+
+#will print all details of specific row given index num , 0=first row ..
+#print(hockey_data.iloc[1])
+
+
+#or multiple rows ( will get rows 0 ,1 ,2)
+#print(hockey_data.iloc[0:3])
+
+#get row 2 , column column 1 .. prints 1 attribute
+#print(hockey_data.iloc[0,1])
+#print('\n')
+
+#will print all rows but only  Name column
+#index =0
+#for index,row in hockey_data.iterrows():
+	#print(index,row['Player'])
+
+#print('\n')
+
+#get mean , min, std , max etc..
+#print(hockey_data.describe())
+
+
+# sort by team asc and Goals Decs
+print(hockey_data.sort_values(['Tm','G'],ascending=[1,0]))
+print('\n')
 
 # add columns G+A
 hockey_data['Total']= hockey_data['G'] + hockey_data['A']
