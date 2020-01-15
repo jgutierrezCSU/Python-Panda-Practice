@@ -100,9 +100,79 @@ print('\n')
 # Get a Series object containing the data type objects of each column of Dataframe.
 # Index of series is column name.
 dataTypeHockey = hockey_data.dtypes
-print('Data type of each column of Dataframe :')
-print(dataTypeHockey)
+#print('Data type of each column of Dataframe :')
+#print(dataTypeHockey)
 
-print(hockey_data.head())
+#print(hockey_data.head())
+
+# take data from dataframe and create a new file with modified attributes
+#hockey_data.to_csv('new_hockey_player_stats.csv')
+# if we want to remove column indexes , column 0
+#hockey_data.to_csv('new_hockey_player_stats.csv', index = False)
+#to excel
+#hockey_data.to_excel('new_hockey_player_stats.xlsx')
+
+#-- Filtering Data --
+# filter By Anaheim team AND Season 2007.. can use OR
+#print(hockey_data.loc[(hockey_data['Tm'] == ' ANA ') & (hockey_data['Season'] == 2007)])
+print('\n')
+
+# By team , Goals greater than 30
+#print(hockey_data.loc[(hockey_data['Tm'] == ' ANA ') & (hockey_data['G'] > 30)])
+print('\n')
+
+# can save new dataframe with out modifing previous dataframe
+# good for check point ..saving work
+
+# new_hockey_data = hockey_data.reset_index(drop=True) # optional reseting index numbers
+new_hockey_data = hockey_data.loc[(hockey_data['Tm'] == ' ANA ') & (hockey_data['G'] > 30)]
+#new_hockey_data.to_csv('new_hockey_player_stats.csv')
+
+# import regular expression
+import re
+#using regular expression get rows where PLayer column equals Kariya or Selanne
+#print(hockey_data.loc[hockey_data['Player'].str.contains(' Kariya| Selanne',regex =True)])
+print('\n')
+
+# flags = re.I mean Caplztn does not matter , * is many or More ,^ is start of line ..otherwise anywhere in name
+#print(hockey_data.loc[hockey_data['Player'].str.contains('^re[a-z]*',flags = re.I,regex =True)])
+
+
+# -- conditional changes --
+
+# Change all instances of "ANA" to "DUC" within Tm column
+#hockey_data.loc[hockey_data['Tm'] == ' ANA ' , 'Tm'] = 'DUC'
+#print(hockey_data.loc[(hockey_data['Tm'] == 'DUC')])
+
+# revert back to "ANA"
+#hockey_data.loc[hockey_data['Tm'] == 'DUC' , 'Tm'] = ' ANA '
+#print(hockey_data.loc[(hockey_data['Tm'] == ' ANA ')])
+
+# Where Tm equals "ANA" , set Total to 99
+# cannot revert to original Total data ..use checkpoint
+hockey_data.loc[hockey_data['Tm'] == ' ANA ' , 'Total'] = 99
+#print(hockey_data.loc[(hockey_data['Tm'] == ' ANA ')])
+
+
+# create new column to hold if more than 50 goals a season was True or False
+hockey_data['MoreThan50'] = False # initialize False
+#print(hockey_data.head())
+
+hockey_data.loc[hockey_data['G'] > 50, 'MoreThan50'] = True
+
+# Default value of display.max_rows is 10 i.e. at max 10 rows will be printed.
+# Set it None to display all rows in the dataframe
+pd.set_option('display.max_rows', None)
+
+# create a new Dataframe of Players with 50 or more goals
+players_w_50_goals =hockey_data.loc[(hockey_data['MoreThan50'] == True)]
+# display all players who scored more than 50 Goals a season 
+# WILL only sort for displaying
+#print(players_w_50_goals.sort_values('G',ascending =False))
+#create new csv file with new data
+players_w_50_goals=players_w_50_goals.drop(columns=['Total']) 
+players_w_50_goals= players_w_50_goals.sort_values('G',ascending =False)
+players_w_50_goals.to_csv('50_Or_More_Goals_Ssn.csv', index = False)
+
 
 
