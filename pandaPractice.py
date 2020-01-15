@@ -166,13 +166,17 @@ pd.set_option('display.max_rows', None)
 
 # create a new Dataframe of Players with 50 or more goals
 players_w_50_goals =hockey_data.loc[(hockey_data['MoreThan50'] == True)]
+
 # display all players who scored more than 50 Goals a season 
-# WILL only sort for displaying
+# WILL only sort for display , dataframe not changed
 #print(players_w_50_goals.sort_values('G',ascending =False))
+
 #create new csv file with new data
-players_w_50_goals=players_w_50_goals.drop(columns=['Total']) 
-players_w_50_goals= players_w_50_goals.sort_values('G',ascending =False)
+players_w_50_goals=players_w_50_goals.drop(columns=['Total']) #drop this colum
+players_w_50_goals= players_w_50_goals.sort_values('G',ascending =False) # sort by Desc
+# create CSV file
 players_w_50_goals.to_csv('50_Or_More_Goals_Ssn.csv', index = False)
 
 
+# -- Aggregate Statistics ..Groupby --
 
