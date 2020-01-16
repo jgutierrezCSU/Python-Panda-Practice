@@ -47,8 +47,8 @@ print('\n')
 
 #print colums
 #will print all rows of specific column
-print(hockey_data[['Season','Player','Tm','G']])
-print('\n')
+#print(hockey_data[['Season','Player','Tm','G']])
+#print('\n')
 
 #will print all details of specific row given index num , 0=first row ..
 #print(hockey_data.iloc[1])
@@ -91,18 +91,18 @@ hockey_data = hockey_data.drop(columns=['Total'])
 
 # second adding method
 #" : " means all rows
-hockey_data['Total'] =hockey_data.iloc[:,5:8].sum(axis=1)
-print(hockey_data.head())
+#hockey_data['Total'] =hockey_data.iloc[:,5:8].sum(axis=1)
+#print(hockey_data.head())
 
-print('\n')
+#print('\n')
 
 
 
 # Get a Series object containing the data type objects of each column of Dataframe.
 # Index of series is column name.
-dataTypeHockey = hockey_data.dtypes
+#dataTypeHockey = hockey_data.dtypes
 #print('Data type of each column of Dataframe :')
-print(dataTypeHockey)
+#print(dataTypeHockey)
 
 #print(hockey_data.head())
 
@@ -116,11 +116,11 @@ print(dataTypeHockey)
 #-- Filtering Data --
 # filter By Anaheim team AND Season 2007.. can use OR
 #print(hockey_data.loc[(hockey_data['Tm'] == ' ANA ') & (hockey_data['Season'] == 2007)])
-print('\n')
+#print('\n')
 
 # By team , Goals greater than 30
 #print(hockey_data.loc[(hockey_data['Tm'] == ' ANA ') & (hockey_data['G'] > 30)])
-print('\n')
+#print('\n')
 
 # can save new dataframe with out modifing previous dataframe
 # good for check point ..saving work
@@ -133,7 +133,7 @@ new_hockey_data = hockey_data.loc[(hockey_data['Tm'] == ' ANA ') & (hockey_data[
 import re
 #using regular expression get rows where PLayer column equals Kariya or Selanne
 #print(hockey_data.loc[hockey_data['Player'].str.contains(' Kariya| Selanne',regex =True)])
-print('\n')
+#print('\n')
 
 # flags = re.I mean Caplztn does not matter , * is many or More ,^ is start of line ..otherwise anywhere in name
 #print(hockey_data.loc[hockey_data['Player'].str.contains('^re[a-z]*',flags = re.I,regex =True)])
@@ -151,7 +151,7 @@ print('\n')
 
 # Where Tm equals "ANA" , set Total to 99
 # cannot revert to original Total data ..use checkpoint
-hockey_data.loc[hockey_data['Tm'] == ' ANA ' , 'Total'] = 99
+#hockey_data.loc[hockey_data['Tm'] == ' ANA ' , 'Total'] = 99
 #print(hockey_data.loc[(hockey_data['Tm'] == ' ANA ')])
 
 
@@ -173,7 +173,7 @@ players_w_50_goals =hockey_data.loc[(hockey_data['MoreThan50'] == True)]
 #print(players_w_50_goals.sort_values('G',ascending =False))
 
 #create new csv file with new data
-players_w_50_goals=players_w_50_goals.drop(columns=['Total']) #drop this colum
+#players_w_50_goals=players_w_50_goals.drop(columns=['Total']) #drop this colum
 players_w_50_goals= players_w_50_goals.sort_values('G',ascending =False) # sort by Desc
 # create CSV file and remove indexing
 #players_w_50_goals.to_csv('50_Or_More_Goals_Ssn.csv', index = False)
@@ -188,9 +188,11 @@ players_w_50_goals= players_w_50_goals.sort_values('G',ascending =False) # sort 
 # Sorted by most Total Points earned 
 Teams_Basic_stats=hockey_data.groupby(['Tm']).sum()[['G','A','S','PTS']]
 Teams_Basic_stats= Teams_Basic_stats.sort_values('PTS',ascending =False) # sort by Desc
-Teams_Basic_stats.to_csv('Teams_Basic_stats.csv')
+#Teams_Basic_stats.to_csv('Teams_Basic_stats.csv')
 
-print(Teams_Basic_stats)
+#print(Teams_Basic_stats)
 
+# getting the count of player  positions per Team then  per season
+#print(hockey_data.groupby(['Tm','Pos','Season' ]).count()[['Player']])
 
 
