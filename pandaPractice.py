@@ -1,5 +1,8 @@
 import pandas as pd
 
+# Link to the csv source and variable meanings 
+# http://inalitic.com/datasets/nhl%20player%20data.html
+
 # Hockey data practice
 hockey_data =pd.read_csv("skater_stats.csv",encoding = "ISO-8859-1",low_memory=False,
 	dtype={'GP': int})
@@ -11,6 +14,8 @@ del hockey_data['Unnamed: 0']
 # some values in 'G' and 'A' are problematic such that they are special charecters, convert those to NaN
 hockey_data['G'] = pd.to_numeric(hockey_data['G'], errors='coerce') # fixes "invalid literal for int() with base 10: ' -   '
 hockey_data['A'] = pd.to_numeric(hockey_data['A'], errors='coerce') # fixes "invalid literal for int() with base 10: ' -   '
+hockey_data['PTS'] = pd.to_numeric(hockey_data['PTS'], errors='coerce') # fixes "invalid literal for int() with base 10: ' -   '
+hockey_data['S'] = pd.to_numeric(hockey_data['S'], errors='coerce') # fixes "invalid literal for int() with base 10: ' -   '
 
 # now fill in empty slots
 hockey_data = hockey_data.fillna(0) # fixes "Cannot convert non-finite values (NA or inf) to integer"
@@ -19,6 +24,8 @@ hockey_data = hockey_data.fillna(0) # fixes "Cannot convert non-finite values (N
 #if all values are numbers , this works but first fill in empty spaces ^^
 hockey_data['G']=hockey_data['G'].astype(int)
 hockey_data['A']=hockey_data['A'].astype(int)
+hockey_data['PTS']=hockey_data['PTS'].astype(int)
+hockey_data['S']=hockey_data['S'].astype(int)
 
 #prints first 3 rows
 print(hockey_data.head(3))
@@ -95,7 +102,7 @@ print('\n')
 # Index of series is column name.
 dataTypeHockey = hockey_data.dtypes
 #print('Data type of each column of Dataframe :')
-#print(dataTypeHockey)
+print(dataTypeHockey)
 
 #print(hockey_data.head())
 
@@ -156,7 +163,7 @@ hockey_data.loc[hockey_data['G'] > 50, 'MoreThan50'] = True
 
 # Default value of display.max_rows is 10 i.e. at max 10 rows will be printed.
 # Set it None to display all rows in the dataframe
-pd.set_option('display.max_rows', None)
+pd.set_option('display.max_rows', 10)
 
 # create a new Dataframe of Players with 50 or more goals
 players_w_50_goals =hockey_data.loc[(hockey_data['MoreThan50'] == True)]
@@ -168,9 +175,22 @@ players_w_50_goals =hockey_data.loc[(hockey_data['MoreThan50'] == True)]
 #create new csv file with new data
 players_w_50_goals=players_w_50_goals.drop(columns=['Total']) #drop this colum
 players_w_50_goals= players_w_50_goals.sort_values('G',ascending =False) # sort by Desc
-# create CSV file
-players_w_50_goals.to_csv('50_Or_More_Goals_Ssn.csv', index = False)
+# create CSV file and remove indexing
+#players_w_50_goals.to_csv('50_Or_More_Goals_Ssn.csv', index = False)
 
 
 # -- Aggregate Statistics ..Groupby --
+
+# group by Player column, get mean of columns and sort by Games played Desc
+# print(hockey_data.groupby(['Player']).mean().sort_values('GP',ascending=False))
+
+# data with the sum of Goals,Assts,TotalPoint per season,and shots taken per season
+# Sorted by most Total Points earned 
+Teams_Basic_stats=hockey_data.groupby(['Tm']).sum()[['G','A','S','PTS']]
+Teams_Basic_stats= Teams_Basic_stats.sort_values('PTS',ascending =False) # sort by Desc
+Teams_Basic_stats.to_csv('Teams_Basic_stats.csv')
+
+print(Teams_Basic_stats)
+
+
 
